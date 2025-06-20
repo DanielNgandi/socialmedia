@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom styles */
+.default-avatar {
+  @apply bg-gray-200 rounded-full flex items-center justify-center text-gray-500;
+}
