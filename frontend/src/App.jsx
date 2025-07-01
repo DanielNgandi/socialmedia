@@ -1,32 +1,73 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { PostProvider } from './context/PostContext';
-import { UserProvider } from './context/UserContext';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
-import Navbar from './components/Navbar';
-import PrivateRoute from './components/PrivateRoute';
+import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import AuthForm from './Components/AuthForm/AuthForm';
+import { getCurrentUser, logoutUser} from './Components/context/AuthLayout';
+import { ToastContainer } from 'react-toastify';
+import UserProfile from './Components/Userprofile/UserProfile';
+//import Navbar from './Components/Navbar/Navbar';
 
-export default function App() {
+
+const App = () => {
+  const [user, setUser] = useState(null); // Initialize as null
+  const [isLoading, setIsLoading] = useState(true); // Added loading state
+
+  // Initialize user on mount
+  useEffect(() => {
+    const currentUser = getCurrentUser();
+    setUser(currentUser);
+    setIsLoading(false);
+  }, []);
+
+  const handleAuthSuccess = () => {
+    const currentUser = getCurrentUser();
+    setUser(currentUser);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      setUser(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Loading state
+  }
+
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <PostProvider>
-          <UserProvider>
-            <Navbar />
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route element={<PrivateRoute />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/profile/:userId?" element={<Profile />} />
-              </Route>
-            </Routes>
-          </UserProvider>
-        </PostProvider>
-      </AuthProvider>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <Routes>
+        {/* Redirect to profile after login */}
+        <Route 
+          path="/" 
+          element={user ? <Navigate to={`/profile/${user.id}`} /> : <Navigate to="/login" />} 
+        />
+        
+        {/* Auth routes */}
+        <Route 
+          path="/login" 
+          element={user ? <Navigate to="/" /> : (
+            <AuthForm isLogin={true} onAuthSuccess={handleAuthSuccess} />
+          )} 
+        />
+        <Route 
+          path="/register" 
+          element={user ? <Navigate to="/" /> : (
+            <AuthForm isLogin={false} onAuthSuccess={handleAuthSuccess} />
+          )} 
+        />
+        
+        {/* Profile route */}
+        <Route 
+          path="/profile/:userId" 
+          element={user ? <UserProfile /> : <Navigate to="/login" />} 
+        />
+      </Routes>
     </BrowserRouter>
   );
-}
+};
+
+export default App;

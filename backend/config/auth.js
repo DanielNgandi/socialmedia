@@ -1,0 +1,2 @@
+export const JWT_SECRET = process.env.JWT_SECRET || '6bce569ec98b251d3942e3cf4c5bd662782b9a6cd2287df4f3f7acc66c72422db4a884c549f86e6137e13db05f6eb3805d388cfdeab53e5312528f86cb848241';
+export const JWT_EXPIRES_IN = '7d';
