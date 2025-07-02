@@ -1,6 +1,18 @@
 import '../.././index.css';
+import { useContext } from "react";
+import { AuthContext } from "../../Context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 import{Search, Person, Chat, Notifications} from "@mui/icons-material";
+
 export default function Topbar() {
+    const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <div className='topbarContainer'>
       <div className="topbarLeft">
@@ -33,6 +45,9 @@ export default function Topbar() {
         </div>
         <img src="/assets/person/img1.png" alt="" className='topbarImg'/>
       </div>
+            {user && (
+        <button onClick={handleLogout}>Logout</button>
+      )}
     </div>
   )
 }

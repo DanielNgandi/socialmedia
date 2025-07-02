@@ -1,5 +1,6 @@
-import './sidebar.css'
-import {Chat, Bookmarks, Groups, HelpOutline, PlayCircleFilledOutlined, RssFeed, School,Event, WorkOutline} from "@mui/icons-material"
+import './sidebar.css';
+import { Link } from "react-router-dom";
+import {Chat, Bookmarks, Groups, HelpOutline, PlayCircleFilledOutlined, RssFeed, School,Event, WorkOutline,Home, Person} from "@mui/icons-material"
 import { Users } from '../../data.js'
 import CloseFriends from '../closeFriends/CloseFriends.jsx'
 
@@ -9,6 +10,21 @@ export default function Sidebar() {
       <div className='sidebarWrapper'>
         <div className="sidebarList">
             <ul>
+            <div className="sidebarNavColumn">
+             <li className='sidebarListItem'>
+                <Link to="/" className="sidebarLink">
+                  <Home className='sidebarIcon'/>
+                  <span className="sidebarListItemText">Home</span>
+                </Link>
+            </li>
+            <li className='sidebarListItem'>
+                <Link to="/profile" className="sidebarLink">
+                  <Person className='sidebarIcon'/>
+                  <span className="sidebarListItemText">Profile</span>
+                </Link>
+            </li>
+            </div>
+
             <li className='sidebarListItem'>
                 <RssFeed className='sidebarIcon'/>
                 <span className="sidebarListItemText">Feed</span>
