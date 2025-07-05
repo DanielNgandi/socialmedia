@@ -10,22 +10,24 @@ import { useContext } from 'react';
 function App() {
 
   return (
-  <AuthProvider>
       <Router>
+        <AuthProvider>
         <Routes>
+          <Route path="/" element={<Navigate to="/register" replace />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/profile/:userId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
+        </AuthProvider>
       </Router>
-    </AuthProvider>
 );
     
 }
 function ProtectedRoute({ children }) {
-  const { user } = useContext(AuthContext);
-  return user ? children : <Navigate to="/login" />;
+  const { currentUser } = useContext(AuthContext);
+  return currentUser ? children : <Navigate to="/login" />;
 }
 
 

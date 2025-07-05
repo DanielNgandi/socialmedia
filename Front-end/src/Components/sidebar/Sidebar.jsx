@@ -12,7 +12,7 @@ export default function Sidebar() {
             <ul>
             <div className="sidebarNavColumn">
              <li className='sidebarListItem'>
-                <Link to="/" className="sidebarLink">
+                <Link to="/home" className="sidebarLink">
                   <Home className='sidebarIcon'/>
                   <span className="sidebarListItemText">Home</span>
                 </Link>

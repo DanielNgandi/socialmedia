@@ -1,18 +1,31 @@
 import "./Register.css";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState} from "react";
 import { AuthContext } from "../../Context/AuthContext.jsx";
 
 export default function Register() {
-      const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { register } = useContext(AuthContext);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
-    // Here you would normally call your API to register
-    // For simplicity, we'll just simulate registration
-    const userData = { username: "demo", email: "demo@example.com" };
-    login(userData); // Log the user in
-    navigate("/login"); // Redirect to login after registration
+  //const handleChange = (e) => {
+    //setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  //};
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (!username || !email || !name || !password) {
+    alert("All fields are required.");
+    return;
+  }
+    const success = await register(username, email, name, password);
+    if (success) {
+      navigate("/login");
+    }
   };
   return (
     <div className="login">
@@ -23,20 +36,40 @@ export default function Register() {
          </span>
         </div>
         <div className="loginRight">
-          <div className="loginBox">
-            <input placeholder="username" className="loginInput"/>
-            <input placeholder="Email" className="loginInput"/>
-            <input placeholder="name" className="loginInput"/>
-            <input placeholder="password" className="loginInput"/>
-            <span className="loginForget"> forgot password ?
-            </span>
-            <button className="loginButton" onClick={handleRegister}>
+          <form className="loginBox" onSubmit={handleRegister}>
+            <input
+              placeholder="Username"
+              className="loginInput"
+              name="username"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              placeholder="Email"
+              className="loginInput"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              placeholder="Name"
+              className="loginInput"
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              placeholder="Password"
+              type="password"
+              className="loginInput"
+              name="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span className="loginForget"> forgot password?</span>
+            <button className="loginButton"  type="submit">
                 Sign up</button>
             <button 
               className="loginRegisterButton"
               onClick={() => navigate("/login")}
             >Log into your account</button>
-          </div>
+          </form>
         </div>
       </div>
     </div>

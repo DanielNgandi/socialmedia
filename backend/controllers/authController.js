@@ -10,9 +10,9 @@ const generateToken = (userId) => {
 };
 
 export const register = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+ const errors = validationResult(req);
+ if (!errors.isEmpty()) {
+  return res.status(400).json({ errors: errors.array() });
   }
 
   try {
@@ -59,27 +59,31 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+   console.log("❌ Validation errors:", errors.array());
+   return res.status(400).json({ errors: errors.array() });
+ }
 
   try {
     const { email, password } = req.body;
+     console.log("📥 Login attempt:", email);
 
     const user = await prisma.user.findUnique({
       where: { email },
     });
 
     if (!user) {
+      console.log("❌ User not found for email:", email);
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+       console.log("❌ Incorrect password for:", email);
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     const token = generateToken(user.id);
-
+     console.log("✅ Login successful for:", email);
     res.json({
       status: 'success',
       token,

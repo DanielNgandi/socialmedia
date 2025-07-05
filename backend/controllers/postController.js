@@ -51,16 +51,16 @@ export const createPost = async (req, res, next) => {
 
 export const getFeedPosts = async (req, res, next) => {
   try {
-    const following = await prisma.follow.findMany({
-      where: { followerId: req.userId },
-      select: { followingId: true },
-    });
+    //const following = await prisma.follow.findMany({
+     // where: { followerId: req.userId },
+     // select: { followingId: true },
+   // });
 
-    const followingIds = following.map((f) => f.followingId);
-    followingIds.push(req.userId);
+   // const followingIds = following.map((f) => f.followingId);
+    //followingIds.push(req.userId);
 
     const posts = await prisma.post.findMany({
-      where: { authorId: { in: followingIds } },
+     // where: { authorId: { in: followingIds } },
       include: {
         author: {
           select: {

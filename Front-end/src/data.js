@@ -33,7 +33,7 @@ export const Users = [
 },
 ]
 
-export const posts = [
+/*export const posts = [
     {
         id:1,
         desc: "Love you all",
@@ -60,3 +60,4 @@ export const posts = [
         comment: 10,
     },
 ] 
+    */

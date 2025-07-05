@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import{Search, Person, Chat, Notifications} from "@mui/icons-material";
 
 export default function Topbar() {
-    const { user, logout } = useContext(AuthContext);
+    const {currentUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -43,9 +43,10 @@ export default function Topbar() {
                 <span className="topbarIconBadge">3</span>
             </div>
         </div>
-        <img src="/assets/person/img1.png" alt="" className='topbarImg'/>
+        <img src={currentUser?.avatar || "/assets/person/img3.png"} alt="Profile"
+       className='topbarImg'/>
       </div>
-            {user && (
+            {currentUser && (
         <button onClick={handleLogout}>Logout</button>
       )}
     </div>

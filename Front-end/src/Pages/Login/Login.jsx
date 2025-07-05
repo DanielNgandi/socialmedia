@@ -1,19 +1,31 @@
 import "./Login.css"
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext,useState } from "react";
 import { AuthContext } from "../../Context/AuthContext.jsx";
 
 export default function Login() {
-      const navigate = useNavigate();
+  const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // Here you would normally call your API to login
-    // For simplicity, we'll just simulate login
-    const userData = { username: "demo", email: "demo@example.com" };
-    login(userData); // Log the user in
-    navigate("/"); // Redirect to home after login
+  //const handleChange = (e) => {
+  //  setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+ // };
+ 
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+    alert("All fields are required.");
+    return;
+  }
+    const success = await login(email, password);
+    if (success) {
+      navigate("/home");
+    }
   };
+
   return (
     <div className="login">
       <div className="loginWrapper">
@@ -23,17 +35,21 @@ export default function Login() {
          </span>
         </div>
         <div className="loginRight">
-          <div className="loginBox">
-            <input placeholder="Email" className="loginInput"/>
-            <input placeholder="password" className="loginInput"/>
+           <form className="loginBox" onSubmit={handleLogin}>
+            <input placeholder="Email"
+              className="loginInput" value={email}
+              onChange={(e) => setEmail(e.target.value)}/>
+             <input placeholder="Password" type="password"
+              className="loginInput" value={password}
+              onChange ={(e) => setPassword(e.target.value)}/>
             <button className="loginButton" 
-            onClick={handleLogin}>
-                Login
-                </button>
+            type="submit">Login
+            </button>
             <button className="loginRegisterButton" 
             onClick={() => navigate("/register")}
-            >create an account</button>
-          </div>
+            >create an account
+            </button>
+          </form>
         </div>
       </div>
     </div>

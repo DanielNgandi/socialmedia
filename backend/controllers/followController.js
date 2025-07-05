@@ -40,6 +40,48 @@ export const followUser = async (req, res, next) => {
   }
 };
 
+export const getFollowing = async (req, res, next) => {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+
+    const following = await prisma.follow.findMany({
+      where: { followerId: userId },
+      include: {
+        following: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            avatar: true
+          }
+        }
+      }
+    });
+
+    const friends = following.map(f => f.following);
+    res.json(friends);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const isFollowing = async (req, res, next) => {
+  try {
+    const targetUserId = parseInt(req.params.userId, 10);
+
+    const follow = await prisma.follow.findFirst({
+      where: {
+        followerId: req.userId,
+        followingId: targetUserId,
+      },
+    });
+
+    res.json({ isFollowing: !!follow });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const unfollowUser = async (req, res, next) => {
   try {
     const followingId = parseInt(req.params.userId, 10);
