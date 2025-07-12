@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      console.log("📤 Logging in with:", email, password);
+      //console.log("📤 Logging in with:", email, password);
       const res = await axios.post("http://localhost:5000/api/auth/login", {
         email,
         password
@@ -29,6 +29,14 @@ export const AuthProvider = ({ children }) => {
    },
   withCredentials: true
 });
+
+     const token = res.data.token;
+     const user = res.data.user;
+
+      // Update user status to online
+      await axios.put(`http://localhost:5000/api/users/${user.id}/online`, null, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("user", JSON.stringify(res.data.user));
     setCurrentUser(res.data.user);
@@ -63,6 +71,11 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+       if (user && token) {
+        await axios.put(`http://localhost:5000/api/users/${user.id}/offline`, null, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
       await axios.post("http://localhost:5000/api/auth/logout", null, {
         withCredentials: true,
       });

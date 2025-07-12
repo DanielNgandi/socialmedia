@@ -1,7 +1,7 @@
-import './Users.css';
+import './user.css';
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../../Context/AuthContext';
+import { AuthContext } from '../../Context/AuthContext.jsx';
 import { Link } from 'react-router-dom';
 
 export default function Users() {

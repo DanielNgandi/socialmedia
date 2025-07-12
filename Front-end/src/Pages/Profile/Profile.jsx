@@ -20,6 +20,7 @@ export default function Profile() {
 
 console.log("userId param:", userId);
 console.log("currentUser.id:", currentUser?.id);
+ console.log(user)
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -96,11 +97,35 @@ setUser(userRes.data);
             <div className="profileInfo">
               <h4 className="profileInfoName" >{user?.name}</h4>
               <span className="profileInfoDesc" >{user?.bio || "Hello, I am new here!"}</span>
+      
+          {user._count && (
+             <div className="profileStats">
+             <span>{user._count.followers} Followers</span>
+             <span>{user._count.following} Following</span>
+             </div>
+             )} 
+
+            
+          
+             {user.followers?.length > 0 && (
+             <div className="followersList">
+               <h4>Followers</h4>
+             {user.followers.map((f) => (
+            <div key={f.follower.id} className="followerItem">
+            <img src={f.follower.avatar || '/assets/person/img3.png'} alt="avatar" className="followerAvatar" />
+            <span>{f.follower.name || f.follower.username}</span>
+          </div>
+         ))}
+        </div>
+      )}
+
                {!isOwnProfile && (
                 <button className="followButton" onClick={handleFollowToggle}>
                   {isFollowing ? "Unfollow" : "Follow"}
                 </button>
               )}
+
+  
             </div>
           </div>
            <div className="profileRightBottom">

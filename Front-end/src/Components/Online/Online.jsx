@@ -1,6 +1,9 @@
 import './online.css'
+//import { useEffect, useState } from "react";
+//import axios from "axios";
 
 export default function Online({user}) {
+
   return (
      <li className="rightbarFriend">
           <div className="rightbarProfileImgCointaner">

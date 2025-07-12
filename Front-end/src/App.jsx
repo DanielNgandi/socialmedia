@@ -5,6 +5,7 @@ import Register from "./Pages/Register/Register.jsx";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './Context/AuthContext.jsx';
 import { useContext } from 'react';
+import Users from "./Pages/Users/User.jsx";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/profile/:userId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
         </Routes>
         </AuthProvider>
       </Router>

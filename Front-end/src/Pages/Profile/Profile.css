@@ -32,6 +32,14 @@
     flex-direction: column;
     align-items: center;
 }
+.profileStats {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  gap: 12px;
+}
+
 .profileInfoName{
     font-size: 24px;
 }
@@ -40,6 +48,20 @@
 }
 .profileRightBottom{
     display: flex;
+}
+.followersList {
+  margin-top: 15px;
+}
+.followerItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.followerAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 .followButton {
   margin-top: 10px;

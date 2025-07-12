@@ -8,6 +8,7 @@ import { AuthContext } from '../../Context/AuthContext';
 export default function Rightbar({Profile}) {
   const { currentUser } = useContext(AuthContext);
   const [friends, setFriends] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -23,11 +24,30 @@ export default function Rightbar({Profile}) {
         console.error("Failed to fetch friends", err);
       }
     };
+        const fetchOnlineUsers = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:5000/api/users/online", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (Array.isArray(response.data)) {
+        setOnlineUsers(response.data);
+        } else {
+          console.error("Expected array of online users, got:", response.data);
+        }
+
+      } catch (err) {
+        console.error("Failed to fetch online users", err);
+      }
+    };
+
 
     if (currentUser?.id) {
       fetchFriends();
+      fetchOnlineUsers();
     }
   }, [currentUser]);
+
   const HomeRightBar =() =>{
     return(
       <>
@@ -40,7 +60,7 @@ export default function Rightbar({Profile}) {
        <img className='rightbarAd' src="/assets/person/img5.png" alt="" />
        <h4 className="rightbarTitle">Online friends</h4>
        <ul className="rightbarFriendList">
-        {friends.map((user) => (
+        {onlineUsers.map((user) => (
         <Online key={user.id} user={user} />
         ))}
       </ul>
@@ -97,6 +117,12 @@ export default function Rightbar({Profile}) {
        </div>
        */}
        </div>
+     <h4 className="rightbarTitle">Online Users</h4>
+        <ul className="rightbarFriendList">
+          {onlineUsers.map((user) => (
+            <Online key={user.id} user={user} />
+          ))}
+        </ul>
       </>
     )
   }

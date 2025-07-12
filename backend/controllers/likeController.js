@@ -1,9 +1,14 @@
+// POST /api/posts/:postId/like
 import prisma from '../config/prisma.js';
 
-export const likePost = async (req, res, next) => {
-  try {
-    const postId = parseInt(req.params.postId, 10);
+export const toggleLike = async (req, res, next) => {
+  console.log("🧪 Like request - userId:", req.userId, "postId:", req.params.postId);
 
+  try {
+    const postId = parseInt(req.params.postId);
+    const userId = req.userId;
+
+    // Check if post exists
     const post = await prisma.post.findUnique({
       where: { id: postId },
     });
@@ -12,51 +17,49 @@ export const likePost = async (req, res, next) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
+    // Check if user already liked the post
     const existingLike = await prisma.like.findFirst({
       where: {
-        userId: req.userId,
+        userId,
         postId,
       },
     });
 
     if (existingLike) {
-      return res.status(400).json({ error: 'Post already liked' });
+      // If liked before, remove the like
+      await prisma.like.delete({
+        where: { id: existingLike.id },
+      });
+
+      // Return updated like count and status
+      const likeCount = await prisma.like.count({ where: { postId } });
+
+      return res.status(200).json({
+        liked: false,
+        likeCount,
+        message: 'Post unliked',
+      });
+    } else {
+      // If not liked yet, add the like
+      await prisma.like.create({
+        data: {
+          userId,
+          postId,
+        },
+      });
+
+      const likeCount = await prisma.like.count({ where: { postId } });
+
+      return res.status(201).json({
+        liked: true,
+        likeCount,
+        message: 'Post liked',
+      });
     }
-
-    const like = await prisma.like.create({
-      data: {
-        userId: req.userId,
-        postId,
-      },
-    });
-
-    res.status(201).json(like);
   } catch (error) {
+    console.error("Like toggle error:", error);
     next(error);
   }
 };
 
-export const unlikePost = async (req, res, next) => {
-  try {
-    const postId = parseInt(req.params.postId, 10);
 
-    const like = await prisma.like.findFirst({
-      where: {
-        userId: req.userId,
-        postId,
-      },
-    });
-
-    if (!like) {
-      return res.status(404).json({ error: 'Like not found' });
-    }
-
-    await prisma.like.delete({
-      where: { id: like.id },
-    });
-
-    res.json({ message: 'Post unliked successfully' });
-  } catch (error) {
-    next(error);
-  }
-};

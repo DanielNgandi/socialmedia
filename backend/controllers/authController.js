@@ -116,14 +116,33 @@ export const getMe = async (req, res, next) => {
       where: {
         id: req.userId,
       },
-      select: {
+        select: {
         id: true,
         username: true,
         name: true,
         email: true,
-        bio: true,
         avatar: true,
+        bio: true,
         createdAt: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
+            posts: true,
+          },
+        },
+        followers: {
+          select: {
+            follower: {
+              select: {
+                id: true,
+                username: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+        },
       },
     });
 

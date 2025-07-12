@@ -22,6 +22,8 @@ export default function Sidebar() {
                   <Person className='sidebarIcon'/>
                   <span className="sidebarListItemText">Profile</span>
                 </Link>
+                <Link to="/users" className="navLink">Find Friends</Link>
+
             </li>
             </div>
 
