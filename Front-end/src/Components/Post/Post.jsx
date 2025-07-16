@@ -113,7 +113,7 @@ const handleDelete = async () => {
     setShowOptions(!showOptions);
     
   }} 
-  style={{ cursor: "pointer",backgroundColor: "yellow" }} 
+  style={{ cursor: "pointer",backgroundColor: "grey", borderRadius: "50%", padding: "5px" }} 
 />
 
   {showOptions && currentUser?.id === post.author?.id && (

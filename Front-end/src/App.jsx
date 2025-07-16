@@ -1,5 +1,6 @@
 import Home from "./Pages/Home/Home.jsx";
 import Profile from "./Pages/Profile/Profile.jsx";
+import Messenger from "./Pages/messenger/Messanger.jsx";
 import Login from "./Pages/Login/Login.jsx";
 import Register from "./Pages/Register/Register.jsx";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -21,6 +22,7 @@ function App() {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/profile/:userId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+          <Route path="/messenger" element={<Messenger />} />
         </Routes>
         </AuthProvider>
       </Router>

@@ -1,12 +1,25 @@
 import '../.././index.css';
-import { useContext } from "react";
+import { useContext,useEffect, useState  } from "react";
 import { AuthContext } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import{Search, Person, Chat, Notifications} from "@mui/icons-material";
 
+import io from "socket.io-client";
+
+const socket = io("http://localhost:5000"); // Adjust your port
+
 export default function Topbar() {
+   const [notifications, setNotifications] = useState(0);
     const {currentUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+   // 🔔 Real-time notification setup
+  useEffect(() => {
+    socket.on("notifyNewPost", () => {
+      setNotifications((prev) => prev + 1);
+    });
+
+    return () => socket.off("notifyNewPost");
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -38,10 +51,12 @@ export default function Topbar() {
                 <Chat/>
                 <span className="topbarIconBadge">2</span>
             </div>
-             <div className='topbarIconItem'>
-                <Notifications/>
-                <span className="topbarIconBadge">3</span>
-            </div>
+              <div className='topbarIconItem'>
+            <Notifications />
+            {notifications > 0 && (
+              <span className="topbarIconBadge">{notifications}</span>
+            )}
+          </div>
         </div>
         <img src={currentUser?.avatar || "/assets/person/img3.png"} alt="Profile"
        className='topbarImg'/>

@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import prisma from '../config/prisma.js';
+import { io } from '../server.js'; // ✅ If you're exporting io from server.js
 
 export const createPost = async (req, res, next) => {
   const errors = validationResult(req);
@@ -35,6 +36,27 @@ export const createPost = async (req, res, next) => {
         },
       },
     });
+
+        // ✅ Send real-time event to all connected clients
+    io.emit('notifyNewPost', { postId: post.id, authorId: req.userId });
+
+    // ✅ Fetch followers of the post author
+    const followers = await prisma.follow.findMany({
+      where: { followingId: req.userId },
+      select: { followerId: true },
+    });
+
+    // ✅ Create a notification for each follower
+    const notifications = followers.map((follower) =>
+      prisma.notification.create({
+        data: {
+          type: 'new_post',
+          userId: follower.followerId, // Recipient of the notification
+          postId: post.id,
+        },
+      })
+    );
+    await Promise.all(notifications);
 
     const transformedPost = {
       ...post,

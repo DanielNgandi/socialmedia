@@ -25,6 +25,10 @@ model User {
   comments  Comment[]
   following Follow[]  @relation("following")
   followers Follow[]  @relation("followers")
+  notifications Notification[]
+  messagesSent Message[]  @relation("sender")
+  conversations Conversation[] @relation("ConversationUsers") // ✅ Opposite side of relation
+
 }
 
 model Post {
@@ -37,6 +41,8 @@ model Post {
   authorId  Int
   likes     Like[]
   comments  Comment[]
+  notifications Notification[]
+
 }
 
 model Comment {
@@ -71,4 +77,32 @@ model Follow {
   createdAt   DateTime @default(now())
 
   @@unique([followerId, followingId])
+}
+model Notification {
+  id        Int      @id @default(autoincrement())
+  type      String   // e.g., "new_post", "comment", etc.
+  userId    Int
+  postId    Int?
+  createdAt DateTime @default(now())
+
+  user   User @relation(fields: [userId], references: [id])
+  post   Post? @relation(fields: [postId], references: [id])
+}
+model Conversation {
+  id          Int        @id @default(autoincrement())
+  users     User[]   @relation("ConversationUsers")      // Array of two user IDs
+  messages    Message[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversationId Int
+  senderId       Int
+  text           String
+  createdAt      DateTime     @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  sender         User         @relation("sender", fields: [senderId], references: [id])
 }

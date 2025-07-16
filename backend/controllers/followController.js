@@ -106,3 +106,29 @@ export const unfollowUser = async (req, res, next) => {
     next(error);
   }
 };
+export const getUserFriends = async (req, res, next) => {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+
+    const following = await prisma.follow.findMany({
+      where: { followerId: userId },
+      include: {
+        following: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    const friends = following.map((f) => f.following);
+
+    res.json(friends);
+  } catch (error) {
+    next(error);
+  }
+};
+

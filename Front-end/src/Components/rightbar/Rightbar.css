@@ -1,5 +1,8 @@
 .rightbar {
     flex: 2;
+    height: calc(100vh - 50px); 
+    overflow-y: auto;
+    position: sticky;
 }
 .rightbarWrapper {
     padding: 20px 0 0;
