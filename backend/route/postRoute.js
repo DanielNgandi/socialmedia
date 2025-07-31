@@ -6,14 +6,21 @@ import { toggleLike } from '../controllers/likeController.js'; // ✅ FIXED: dir
 import authMiddleware from '../middleware/authMiddleware.js';
 import validateRequest from '../middleware/validateRequest.js';
 import * as commentController from '../controllers/commentController.js';
+import {upload} from '../middleware/multerMiddleware.js';
 
 const router = Router();
 
 router.post(
   '/',
+  upload.single('file'),
   [
-    authMiddleware,
-    body('content').trim().notEmpty().withMessage('Content is required'),
+    authMiddleware, body('content')
+      .custom((value, { req }) => {
+        if (!value && !req.file) {
+          throw new Error('Either content or image is required');
+        }
+        return true;
+      }),
     validateRequest
   ],
   postController.createPost

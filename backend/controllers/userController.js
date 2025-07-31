@@ -33,8 +33,7 @@ export const getAllUsers = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
   try {
-    const userId =  req.userId;
-    //const userId = parseInt(req.params.id) || req.userId;
+    const userId =   req.params.id ? parseInt(req.params.id) : req.userId;
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -71,7 +70,7 @@ export const getUser = async (req, res, next) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    if (req.userId) {
+    if (req.userId && req.userId !== userId){
       const isFollowing = await prisma.follow.findFirst({
         where: {
           followerId: req.userId,
@@ -89,14 +88,18 @@ export const getUser = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   try {
-    const { name, bio, avatar } = req.body;
+    const { name, bio,} = req.body;
+      let avatar;
 
+    if (req.file) {
+      avatar = `/uploads/${req.file.filename}`;
+    }
     const updatedUser = await prisma.user.update({
       where: { id: req.userId },
       data: {
         name,
         bio,
-        avatar,
+        ...(avatar && { avatar }),
       },
       select: {
         id: true,

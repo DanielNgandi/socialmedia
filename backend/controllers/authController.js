@@ -49,6 +49,7 @@ export const register = async (req, res, next) => {
         username: user.username,
         name: user.name,
         email: user.email,
+        avatar: user.avatar || null,
       },
     });
   } catch (error) {
@@ -92,12 +93,38 @@ export const login = async (req, res, next) => {
         username: user.username,
         name: user.name,
         email: user.email,
+        avatar: user.avatar || null,
       },
     });
   } catch (error) {
     next(error);
   }
 };
+export const resetPassword = async (req, res) => {
+    try {
+      const { email, newPassword } = req.body;
+  
+      if (!newPassword || typeof newPassword !== 'string') {
+        return res.status(400).json({ error: 'Invalid request' });
+      }
+  
+      const user = await prisma.user.findUnique({ where: { email } });
+      if (!user) {
+        return res.status(400).json({ error: 'No account found with that email' });
+      }
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await prisma.user.update({
+        where: { email },
+        data: { password: hashedPassword },
+      });
+  
+      res.json({ message: 'Password reset successful' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  
 
 export const logout = (req, res) => {
   res.json({

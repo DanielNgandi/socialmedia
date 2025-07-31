@@ -9,12 +9,12 @@ export const createPost = async (req, res, next) => {
   }
 
   try {
-    const { content, image } = req.body;
-
+    const { content } = req.body;
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
     const post = await prisma.post.create({
       data: {
-        content,
-        image: image || null,
+        content: content || "",
+        image: imagePath,
         authorId: req.userId,
       },
       include: {
@@ -37,10 +37,10 @@ export const createPost = async (req, res, next) => {
       },
     });
 
-        // ✅ Send real-time event to all connected clients
+        
     io.emit('notifyNewPost', { postId: post.id, authorId: req.userId });
 
-    // ✅ Fetch followers of the post author
+    
     const followers = await prisma.follow.findMany({
       where: { followingId: req.userId },
       select: { followerId: true },
@@ -63,6 +63,8 @@ export const createPost = async (req, res, next) => {
       isLiked: post.likes.length > 0,
       likes: undefined,
       likeCount: 0,
+     // likeCount: post._count.likes,
+      image: post.image, // ✅ Make sure this is returned
     };
 
     res.status(201).json(transformedPost);

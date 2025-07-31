@@ -71,8 +71,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-       if (user && token) {
-        await axios.put(`http://localhost:5000/api/users/${user.id}/offline`, null, {
+     const storedUser = currentUser || JSON.parse(localStorage.getItem("user"));
+     const token = localStorage.getItem("token");
+
+       if ( storedUser && token) {
+        await axios.put(`http://localhost:5000/api/users/${storedUser.id}/offline`,
+           null, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
@@ -82,16 +86,16 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(null);
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-         return true; // Return  status
-      //navigate("/login");
+         return true; 
+      
     } catch (err) {
-      console.error(err);
-        return false; // Return failure status
+      console.error("Logout error:",err);
+        return false; 
     }
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, register, logout }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

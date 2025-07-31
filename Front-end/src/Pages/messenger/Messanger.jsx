@@ -32,26 +32,7 @@ export default function Messanger() {
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 
-  {/*useEffect(() => {
-    const getConversations = async () => {
-      try {
-         const token = localStorage.getItem("token"); // Get token
-         const res = await axios.get(`http://localhost:5000/api/chat/conversations/${currentUser.id}`,
-        {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log("Fetched conversations: ", res.data);
-        setConversations(Array.isArray(res.data) ? res.data : []);
-      } catch (err) {
-        console.log(console.log("❌ Conversation error:", err.response?.data || err.message));
-      }
-    };
-    getConversations();
-  }, [currentUser.id]);
- */}
+  
    useEffect(() => {
     const fetchUsers = async () => {
       try {

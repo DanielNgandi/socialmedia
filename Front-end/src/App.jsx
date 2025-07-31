@@ -3,6 +3,7 @@ import Profile from "./Pages/Profile/Profile.jsx";
 import Messenger from "./Pages/messenger/Messanger.jsx";
 import Login from "./Pages/Login/Login.jsx";
 import Register from "./Pages/Register/Register.jsx";
+import ResetPassword from "./Pages/Resetpassword/Reset-password.jsx";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './Context/AuthContext.jsx';
 import { useContext } from 'react';
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Navigate to="/register" replace />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/profile/:userId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

@@ -13,9 +13,9 @@ export default function Post({post, onPostDeleted, currentUser}) {
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
 
-    const dropdownRef = useRef(); // 👈 1. Create ref
+    const dropdownRef = useRef(); 
 
-  // 👇 2. Add this useEffect inside the component
+    
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -103,7 +103,15 @@ const handleDelete = async () => {
         <div className="postWrapper">
             <div className="postTop">
                 <div className="postTopLeft">
-                    <img className="postProfileImg" src={post.author?.avatar || "/assets/person/img3.png"} alt=""/>
+                   <img
+  className="postProfileImg"
+  src={
+    post.author?.avatar
+      ? `http://localhost:5000${post.author.avatar}`
+      : "/assets/person/img3.png"
+  }
+  alt="author avatar"
+/>
                     <span className="postUsername">{post.author?.username}</span>
                     <span className="postDate">{new Date(post.createdAt).toLocaleString()}</span>
                 </div>
@@ -128,7 +136,9 @@ const handleDelete = async () => {
             </div>
             <div className="postCenter">
               {post.content && <span className="postText">{post.content}</span>}
-              {post.image && <img className="postImg" src={post.image} alt="post" />}
+              {post.image &&  (
+  <img src={`http://localhost:5000${post.image}`} alt="post" className="postImg" />
+)}
             </div>
             <div className="postButton">
                 <div className="postButtonTopLeft">
@@ -147,12 +157,18 @@ const handleDelete = async () => {
         </div>
 
         {showComments && (
-          <div className="commentSection">
-            {comments.map((comment) => (
-              <div key={comment.id} className="commentItem">
-                <img
-                  src={comment.author?.avatar || "/assets/person/img3.png"}
-                  alt=""
+         <div className="commentSection">
+            {comments.map((comment) => {
+              const own = comment.author?.id === currentUser?.id;
+              return (
+                <div key={comment.id} className={`commentItem ${own ? "own" : ""}`}>
+                  <img
+                    src={
+                      comment.author?.avatar
+                        ? `http://localhost:5000${comment.author.avatar}`
+                        : "/assets/person/img3.png"
+                    }
+                    alt=""
                   className="commentAvatar"
                 />
                 <div className="commentContent">
@@ -163,7 +179,8 @@ const handleDelete = async () => {
                   </span>
                 </div>
               </div>
-            ))}
+         );
+   })}
 
             <form onSubmit={handleCommentSubmit} className="commentForm">
               <input
@@ -174,7 +191,7 @@ const handleDelete = async () => {
                 className="commentInput"
               />
               <button type="submit" className="commentButton">
-                Post
+                comment
               </button>
             </form>
           </div>

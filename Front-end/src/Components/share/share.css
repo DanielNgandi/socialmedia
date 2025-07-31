@@ -1,6 +1,6 @@
 .share {
     width: 100%;
-    height: 250px;
+    height: 300px;
     border-radius: 10px;
     box-shadow: 1px 2px 0px 0px rgba(149,162,166,0.43);
 -webkit-box-shadow: 1px 2px 0px 0px rgba(149,162,166,0.43);
@@ -88,4 +88,33 @@
     padding: 10px;
     width: 50px;
     height: 3;
+}
+.shareImgPreview {
+  margin-top: 10px;
+  max-height: 300px;      
+  overflow-y: auto;         
+  margin-top: 10px;
+  padding: 5px;
+  position: relative;
+}
+
+.shareImgPreviewImg {
+  width: 200px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  display: flex;
+  justify-self: center;
+}
+
+.shareCancelImg {
+  position: absolute;
+  top: 5px;
+  color: #555;
+  right: 5px;
+  padding: 2px 6px;
+  z-index: 2;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 }

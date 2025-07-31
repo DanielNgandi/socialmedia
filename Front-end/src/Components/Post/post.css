@@ -4,6 +4,7 @@
     box-shadow: 1px 2px 0px 0px rgba(149,162,166,0.43);
 -webkit-box-shadow: 1px 2px 0px 0px rgba(149,162,166,0.43);
 margin: 30px 0;
+background-color: rgb(252, 246, 246);
 }
 .postWrapper{
    padding: 10px;
@@ -98,8 +99,15 @@ margin: 30px 0;
   display: flex;
   align-items: flex-start;
   margin-bottom: 10px;
+  max-width: 80%;
 }
-
+.commentItem.own {
+  flex-direction: row-reverse;
+  align-self: flex-end;
+  margin-left: auto;
+  border-radius: 10px;
+  padding: 8px;
+}
 .commentAvatar {
   width: 32px;
   height: 32px;
@@ -107,12 +115,15 @@ margin: 30px 0;
   object-fit: cover;
   margin-right: 10px;
 }
-
+.commentItem.own .commentAvatar {
+  margin-left: 10px;
+  margin-right: 0;
+}
 .commentContent {
   background-color: #f0f2f5;
   padding: 8px 12px;
   border-radius: 10px;
-  max-width: 90%;
+  
 }
 
 .commentDate {

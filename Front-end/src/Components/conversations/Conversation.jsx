@@ -5,7 +5,12 @@ export default function Conversation({ user }) {
   return (
     <>
       <div className="conversation">
-      <img src={user?.avatar || 'assets/person/img1.png'} alt="" className="conversationImg" />
+      <img src={
+          user?.avatar
+            ? `http://localhost:5000${user.avatar}`
+            : '/assets/person/defaultAvatar.png'
+        }
+        alt="Profile" className="conversationImg" />
       <span className="conversationName">{user?.username || 'Unknown User'}</span>
     </div>
     </>

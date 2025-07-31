@@ -62,7 +62,7 @@ export default function Register() {
               name="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span className="loginForget"> forgot password?</span>
+            <span className="loginForget" onClick={() => navigate("/reset-password")} style={{ cursor: 'pointer', color: 'blue' }}> forgot password?</span>
             <button className="loginButton"  type="submit">
                 Sign up</button>
             <button 
